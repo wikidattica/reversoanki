@@ -1,0 +1,13 @@
+syntax:glob
+.svn
+*.pyc
+*.backups*
+
+syntax: regexp
+^demo/mako_modules/*
+^node_modules
+^.git
+.*~
+.*pyc
+\#.*[\#]
+\.\#.*
