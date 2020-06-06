@@ -1,0 +1,13 @@
+{
+    "email": "your@email.com",
+    "password": "yourPassword",
+    "check_for_new_version": true,
+    "check_for_new_version": true,
+    "deck_name": "",
+    "create_reversed": false,
+    "last_imported_from_history": "",
+    "last_imported_from_favourites": "",
+    "import_source": "history",
+    "import_only_new_words": true
+
+}

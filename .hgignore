@@ -2,6 +2,9 @@ syntax:glob
 .svn
 *.pyc
 *.backups*
+meta.json
+crea-pkg.sh
+Makefile
 
 syntax: regexp
 ^demo/mako_modules/*
