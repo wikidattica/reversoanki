@@ -58,7 +58,7 @@ class PluginWindow(qt.QDialog):
         # Disable buttons and hide progress bar
         self.progressBar.hide()
 
-        self.check_new_verson_availability
+        # self.check_new_verson_availability
         self.check_deck_preferencies()
         self.update_gui_from_config()
         self.show()

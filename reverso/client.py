@@ -11,10 +11,10 @@ from .reverso_model import ReversoModel
 
 
 class ReversoClient:
-    """This calss should be easy to debug and run outside anki and qt5"""
+    """This class should be easy to debug and run outside anki and qt5"""
 
-    HOME_URL = 'https://www.reverso.net/'
-    AUTH_URL = 'https://account.reverso.net/login/context.reverso.net/it?utm_source=contextweb&utm_medium=usertopmenu&utm_campaign=login'
+    HOME_URL = 'https://account.reverso.net/Account/Login?returnUrl=https%3A%2F%2Fwww.reverso.net%2F'
+    AUTH_URL = 'https://account.reverso.net/Account/Login?returnUrl=https%3A%2F%2Fcontext.reverso.net%2F&lang=en'
     HISTORY_URL = 'https://context.reverso.net/bst-web-user/user/history?start=0&length=1000&order=6'
     FAVOURITES_URL = 'https://context.reverso.net/bst-web-user/user/favourites?start=0&length=2000&order=10'
     DECK_NAME = 'Reverso'
@@ -51,20 +51,36 @@ class ReversoClient:
         }
 
     def auth(self):
+        
+        headers = {
+            'Content-Type': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:67.0) Gecko/20100101 Firefox/67.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        }
 
+        self.login_get_resp = self.session.get(self.HOME_URL, headers=headers)
+        if self.verbose:
+            print(f'GET Home resp {self.login_get_resp.status_code}')
+        headers_post = {**headers, 'Content-Type': 'application/x-www-form-urlencoded'}
         data = {
             'Email': self.username,
             'Password': self.password,
+            '__RequestVerificationToken': self.get_request_verification_token(self.login_get_resp.text)
         }
-        self.auth_resp = self.session.post(self.AUTH_URL, data=data, headers=self.headers, allow_redirects=False)
-
-        if not self.auth_resp.status_code == 302:
-            msg = f"Error! Possibly, credentials are wrong... (status code: {self.auth_resp.status_code})"
-            raise RuntimeError(msg)
+        self.auth_resp = self.session.post(
+            self.AUTH_URL, data=data, headers=headers_post, allow_redirects=False)
 
         if self.verbose:
             print(f'POST AUTH resp {self.auth_resp.status_code}')
             print('AUTH Cookies', self.session.cookies.keys())
+
+    def get_request_verification_token(self, html):
+        soup = BeautifulSoup(html, 'html.parser')
+        form = soup.select_one('form#account')
+        __RequestVerificationToken = form.find('input', type="hidden").get('value')
+        if self.verbose:
+            print(__RequestVerificationToken)
+        return __RequestVerificationToken
 
     def get_data_from_server(self, last_word=None, target='history'):
         """get the history(chronology) / favourites
