@@ -29,7 +29,11 @@ This plugin lets you import your words into anki.
 initial Release
 
 **rel 1.1.0 2020-06-24***
-Changed authentication after change in Reverso login page. 
+Changed authentication after change in Reverso login page.
+By mistake this version is a copy of 1.0.0. Install next
+
+**rel 1.1.1 2020-06-24 - later...***
+Packaging fix
 
 **rel 1.2 2020-06-30***
 Added menu entry to add reverse card for Reverso, Fleex and Basic with reverse
