@@ -2,6 +2,9 @@
 from aqt import mw
 from aqt.qt import QAction
 from aqt.utils import showInfo
+from anki.hooks import addHook
+from aqt.utils import tooltip
+from anki.lang import _
 
 from . import gui
 from . import utils
@@ -26,6 +29,9 @@ def activate():
                      "is present and not in use by other applications")
 
 
+
+addHook("browser.setupMenus", utils.setupMenu)
+addHook("browser.onContextMenu", utils.setupMenu)
 # create a new menu item
 action = QAction(f"Import from Reverso - v{VERSION}", mw)
 # set it to call a function when it's clicked
