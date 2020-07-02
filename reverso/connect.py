@@ -35,7 +35,7 @@ class Reverso(qt.QObject):
         try:
             self.resp_auth = self.client.auth()
             return True
-        except RuntimeError as e:
+        except client.AuthenticationError as e:
             self.Error.emit(str(e))
             return False
 

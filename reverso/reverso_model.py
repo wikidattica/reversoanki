@@ -9,7 +9,7 @@ TEMPLATES = {
     'default': {
         'qfmt': """{{srcText}}<br>
             {{#context}}
-              <div class="hint">{{hint:context}}</div> 
+              <div class="hint">{{hint:context}}</div>
               <a class="document" href="{{document}}"><span class="document">{{documentTitle}}</span></a>
         {{/context}}""",
 

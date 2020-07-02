@@ -3,7 +3,6 @@ import platform as pm
 from aqt import mw
 from aqt.utils import showInfo
 from PyQt5 import QtCore, QtGui, QtWidgets
-from aqt.qt import *
 from aqt import qt
 # TODO: change to:  import connect as connector
 from . import connect
@@ -208,7 +207,8 @@ class PluginWindow(qt.QDialog):
 
         self.create_reverso_object(login, password, self.config)
         self.Authorize.emit()
-        # self.show_progress_bar(True, 'Connecting to Reverso...')
+        print('Connecting to reverso')
+        self.show_progress_bar(True, 'Connecting to Reverso...')
         # Disable login button and fields
         mw.addonManager.writeConfig(__name__, self.config)
 
@@ -257,7 +257,7 @@ class PluginWindow(qt.QDialog):
         if not thread.wait(5000):
             thread.terminate()
 
-    @pyqtSlot(dict)
+    @qt.pyqtSlot(dict)
     def update_config(self, config):
 
         if config:  # signal from ReversoClient
@@ -322,7 +322,7 @@ class PluginWindow(qt.QDialog):
         reverso.UpdateConfig.connect(self.update_config)
         ## Reverso is very fast so that use of a separate thread is not really necessary
         ## Debugg is way easier in a single thread with vscode.
-        # reverso.moveToThread(self.reverso_thread)
+        reverso.moveToThread(self.reverso_thread)
         reverso.Error.connect(self.showErrorMessage)
         self.Authorize.connect(reverso.authorize)
         reverso.AuthorizationStatus.connect(self.process_authorization)
@@ -331,13 +331,13 @@ class PluginWindow(qt.QDialog):
         self.RequestWords.connect(reverso.get_words_to_add)
         self.reverso_thread.reverso = reverso
 
-    @pyqtSlot(bool)
+    @qt.pyqtSlot(bool)
     def process_authorization(self, status):
         if status:
             self.request_words([], self.last_imported_from_history, self.last_imported_from_favourites)
         else:
             self.allow_to_close(True)
-        self.show_progress_bar(False, '')
+        #self.show_progress_bar(False, '')
 
     @property
     def last_imported_from_history(self):
@@ -351,7 +351,7 @@ class PluginWindow(qt.QDialog):
             return self.lastWordFavouritesField.text()
         return ''
 
-    @pyqtSlot(list)
+    @qt.pyqtSlot(list)
     def request_words(self, words, last_word_from_history, last_word_from_favourites):
 
         self.activate_addon_window()
@@ -361,7 +361,7 @@ class PluginWindow(qt.QDialog):
         self.RequestWords.emit(status, words, self.config)
         self.show_progress_bar(True, 'Requesting list of words...')
 
-    @pyqtSlot(list)
+    @qt.pyqtSlot(list)
     def download_words(self, words):
         self.reverso_import.client.import_data(words, deck_name=self.deckField.currentText())
         self.show_progress_bar(True, 'Found {} words'.format(len(words)))
@@ -370,7 +370,7 @@ class PluginWindow(qt.QDialog):
             progress = self.get_progress_status()
             msg = 'No %s words to download' % progress if progress != 'all' else 'No words to download'
             showInfo(msg)
-            self.show_progress_bar(False, '')
+            #self.show_progress_bar(False, '')
             self.allow_to_close(True)
             self.activate_addon_window()
         self.download_finished(len(words))
@@ -400,21 +400,21 @@ class PluginWindow(qt.QDialog):
         """
         utils.add_word(word, self.model)
 
-    @pyqtSlot(bool)
+    @qt.pyqtSlot(bool)
     def set_busy_download(self, status):
         """
         When downloading media for words
         """
         self.is_active_download = status
 
-    @pyqtSlot(bool)
+    @qt.pyqtSlot(bool)
     def set_busy_connecting(self, status):
         """
         When connecting to Reverso for authorization or requesting list of words or wordsets
         """
         self.is_active_connection = status
-        if not status:
-            self.show_progress_bar(False, '')
+        # if not status:
+        #     self.show_progress_bar(False, '')
 
 # UI helpers
 #####################################
@@ -425,6 +425,7 @@ class PluginWindow(qt.QDialog):
             self.progressBar.show()
         else:
             self.progressBar.hide()
+            
         self.progressLabel.setText(label)
 
     def showErrorMessage(self, msg):

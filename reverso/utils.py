@@ -51,6 +51,7 @@ def is_newer_version_available(lines):
                 return True
     return False
 
+
 def setReverseField(browser, nids):
 
     mw = browser.mw
@@ -58,7 +59,7 @@ def setReverseField(browser, nids):
     mw.progress.start()
     browser.model.beginReset()
     cnt = 0
-    optional_anki_reverse_name = _("Add Reverse") 
+    optional_anki_reverse_name = _("Add Reverse")
     for nid in nids:
         note = mw.col.getNote(nid)
         if 'reverse' in note and not note['reverse']:
@@ -92,10 +93,10 @@ def onBatchEdit(browser):
 def setupMenu(browser, menu=None):
     menu = menu or browser.form.menuEdit
     menu_data = [x.data() for x in menu.children()]
-    ## Both Reverso and Fleex add-on use this functionthat doesn't need 
+    ## Both Reverso and Fleex add-on use this functionthat doesn't need
     ## to be repeated
     if 'add_reverse' in menu_data:
-        return 
+        return
     menu.addSeparator()
     a = menu.addAction('Add reverse for selected cards...')
     a.setData('add_reverse')

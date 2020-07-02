@@ -38,6 +38,9 @@ Packaging fix
 **rel 1.2 2020-06-30***
 Added menu entry to add reverse card for Reverso, Fleex and Basic with reverse
 
+**rel 1.3 2020-06-30***
+Added check for failed authentication
+
 **Authors***
 
 Alessandro Dentella for the project [Wikidattica][2]
