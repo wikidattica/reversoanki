@@ -36,8 +36,8 @@ class PluginWindow(qt.QDialog):
         ###############
         title = 'Import from Reverso (version {})'.format(VERSION)
         self.setWindowTitle(title)
-        if pm.system() == 'Windows':
-            self.setWindowIcon(qt.QIcon(utils.get_icon_path('favicon.ico')))
+        # if pm.system() == 'Windows':
+        #     self.setWindowIcon(qt.QIcon(utils.get_icon_path('favicon.ico')))
 
         login_layout = self.layout_login()
         import_layout = self.layout_import_preferences()
