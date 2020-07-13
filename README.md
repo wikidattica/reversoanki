@@ -41,6 +41,9 @@ Added menu entry to add reverse card for Reverso, Fleex and Basic with reverse
 **rel 1.3 2020-06-30***
 Added check for failed authentication
 
+**rel 1.4 2020-07-14***
+Windows: fix for reference to missing get_icon_path function
+
 **Authors***
 
 Alessandro Dentella for the project [Wikidattica][2]
