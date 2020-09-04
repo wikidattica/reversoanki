@@ -121,7 +121,6 @@ class Client:
 
         if not data:
             return []
-        self.notes = data
         if target == 'history':
             self.config['last_imported_from_history'] = data[0]['srcText']
         else:
@@ -201,14 +200,32 @@ class Client:
         :arg config: intended to overwrite config parameters from GUI
 
         """
+        ## NOTE: as of sept 2020 reverso doesn't show the context (sentence where is was found) of
+        ## the words from 'favourites' but only for 'history'. So I get history all the times and
+        ## transfer the context over to favourites
+
         if config:
             self.config.update(config)
-        self.notes = []
+
         if self.config['import_source'] == 'history':
-            self.get_data_from_server(last_word=self.config['last_imported_from_history'], target="history")
+            notes = self.get_data_from_server(
+                last_word=self.config['last_imported_from_history'], target="history")
         else:
-            self.get_data_from_server(last_word=self.config['last_imported_from_favourites'], target="favourites")
-        return self.notes
+            # get them all, we don't even want to consider the "last word"
+            notes_history = self.get_data_from_server(last_word=None, target="history")
+            notes_history_dict = {x['srcText']: x for x in notes_history}
+            notes = self.get_data_from_server(
+                last_word=self.config['last_imported_from_favourites'], target="favourites")
+            for j, note in enumerate(notes):
+                key = note['srcText']
+                if key in notes_history_dict:
+                    context_history = notes_history_dict[key].get('srcContext', '')
+                    context_favourites = note['srcContext']
+                    context_favourites_clean = BeautifulSoup(context_favourites, features="html.parser").get_text()
+                    note['srcContext'] = f'{context_history}\n\n{context_favourites_clean}'
+                    notes[j] = note
+        self.notes = notes
+        return notes
 
 
 class ReversoClient(Client):
@@ -234,7 +251,7 @@ class ReversoClient(Client):
                 context = note['srcContext']
             else:
                 translation = note['trgText']
-                context = note['srcSegment']
+                context = note['srcContext'] or note['srcSegment']
 
             writer.writerow([
                 note['srcText'],
