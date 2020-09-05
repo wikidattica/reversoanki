@@ -9,11 +9,15 @@ TEMPLATES = {
     'default': {
         'qfmt': """{{srcText}}<br>
             {{#context}}
-              <div class="hint">{{hint:context}}</div>
+	      <br>
+              <div class="hint">{{hint:context}} </div> 
               <a class="document" href="{{document}}"><span class="document">{{documentTitle}}</span></a>
-        {{/context}}""",
-
+        {{/context}}
+        <div class="lang">
+        {{srcLang}} => {{trgLang}}
+        </div>""",
         'afmt': """
+            {{srcText}}<hr>
             <p class="translation">
             {{translation}}
             </p>
@@ -23,7 +27,11 @@ TEMPLATES = {
         """
     },
     'reversed': {
-        'qfmt': """{{#reverse}}{{translation}}<br>{{/reverse}}""",
+        'qfmt': """{{#reverse}}{{translation}}<br>{{/reverse}}
+        <div class="lang">
+        {{trgLang}} => {{srcLang}}
+        </div>
+        """,
 
         'afmt': """
             <p class="translation">
@@ -39,27 +47,38 @@ CSS = """.card {
  font-family: arial;
  font-size: 30px;
  text-align: center;
- color: black;
+ color: #333;
  background-color: white;
 }
 .hint, .context {
- font-size: 80%
+ font-size: 80%;
+ text-align: left;
+ font-style: italic;
+ color: #132184
 }
-.translation {
-font-size: 80%
+a.hint {
+  color: brown;
+  text-align: center;
+  font-weight: bold;
+  font-style: normal
 }
-.document {
- font-size: 50%;
- color: brown;
- position: absolute;
- bottom: 10px;
- right: 10px;
- text-decoration: none;
- text-align: right;
- width: 100%;
+.document, .lang {
+   font-size: 70%;
+   color: brown;
+   position: absolute;
+   bottom: 10px;
+   right: 10px;
+   text-decoration: none;
+   text-align: right;
+   width: 100%;
 }
-    """
-
+.lang {
+   left: 10px; 
+   text-align: left;
+}
+"""
+## This is an old model. It's here just to track that json data from Reverso change...
+## the translation{1,2,3} doesn't exist anymore
 #{'id': '876099614',
 #  'userid': '439297',
 #  'md5': '917f2c2da1acc0c32574841865e8514c',
@@ -105,6 +124,17 @@ class ReversoModel:
 
     def __init__(self,  deck_name=None):
         self.model = mw.col.models.byName(self.NAME) or None
+        self.modify_template()
+
+    def modify_template(self):
+        if '.xdocument, .lang' in self.model['css']:
+            return
+        self.model['css'] = CSS
+        self.model['tmpls'][0]['qfmt'] = TEMPLATES['default']['qfmt']
+        self.model['tmpls'][0]['afmt'] = TEMPLATES['default']['afmt']
+        self.model['tmpls'][1]['qfmt'] = TEMPLATES['default']['qfmt']
+        self.model['tmpls'][1]['afmt'] = TEMPLATES['default']['afmt']
+        mw.col.models.update(self.model)
 
     def create_model(self):
         self.model = mw.col.models.new(self.NAME)
