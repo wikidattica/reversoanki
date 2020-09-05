@@ -124,10 +124,12 @@ class ReversoModel:
 
     def __init__(self,  deck_name=None):
         self.model = mw.col.models.byName(self.NAME) or None
-        self.modify_template()
+        if self.model:
+            self.modify_template()
+        # create_model is called from Client.get_model()
 
     def modify_template(self):
-        if '.xdocument, .lang' in self.model['css']:
+        if self.model['css'] and '.document, .lang' in self.model['css']:
             return
         self.model['css'] = CSS
         self.model['tmpls'][0]['qfmt'] = TEMPLATES['default']['qfmt']

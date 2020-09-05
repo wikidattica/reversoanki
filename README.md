@@ -52,6 +52,9 @@ Template changes:
 * colors and font to improve readability
 * added label to show which translation in reguired (es.: en => it)
 
+**rel 1.5.1 2020-09-05***
+Fix in case of first installation
+
 **Authors***
 
 Alessandro Dentella for the project [Wikidattica][2]
