@@ -44,6 +44,14 @@ Added check for failed authentication
 **rel 1.4 2020-07-14***
 Windows: fix for reference to missing get_icon_path function
 
+**rel 1.5 2020-09-05***
+Update due to changed Reverso json format, context is now available again.
+Template changes:
+
+* question is shown as well when answer is shown
+* colors and font to improve readability
+* added label to show which translation in reguired (es.: en => it)
+
 **Authors***
 
 Alessandro Dentella for the project [Wikidattica][2]
