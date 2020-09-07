@@ -32,10 +32,10 @@ TEMPLATES = {
         """
     },
     'reversed': {
-        'qfmt': """{{#reverse}}{{translation}}<br>{{/reverse}}
+        'qfmt': """{{#reverse}}{{translation}}<br>
         <div class="lang">
         {{trgLang}} => {{srcLang}}
-        </div>
+        </div>{{/reverse}}
         """,
 
         'afmt': """
@@ -47,9 +47,6 @@ TEMPLATES = {
               <p>
                 {{context}}
               </p>
-           </div>
-           <div class="lang">
-            {{trgLang}} => {{srcLang}}
            </div>
         """
     }
@@ -157,8 +154,8 @@ class ReversoModel:
         self.model['css'] = CSS
         self.model['tmpls'][0]['qfmt'] = TEMPLATES['default']['qfmt']
         self.model['tmpls'][0]['afmt'] = TEMPLATES['default']['afmt']
-        self.model['tmpls'][1]['qfmt'] = TEMPLATES['default']['qfmt']
-        self.model['tmpls'][1]['afmt'] = TEMPLATES['default']['afmt']
+        self.model['tmpls'][1]['qfmt'] = TEMPLATES['reversed']['qfmt']
+        self.model['tmpls'][1]['afmt'] = TEMPLATES['reversed']['afmt']
         mw.col.models.update(self.model)
 
     def create_model(self):

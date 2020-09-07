@@ -54,7 +54,8 @@ Template changes:
 
 **rel 1.5.1 2020-09-05*** Fix in case of first installation
 
-**rel 1.5.2 2020-09-07*** Reverso has template similar to front
+**rel 1.5.5 2020-09-07*** Reverso template has template similar to front
+                          Front card of Reversed must be empty
 
 **Important Note**
 In case of any problems please contact me on the official support page on 
