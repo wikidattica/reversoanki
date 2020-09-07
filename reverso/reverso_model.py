@@ -41,12 +41,15 @@ TEMPLATES = {
         'afmt': """
             {{translation}}<hr>
             <p class="translation">
-            {{srcText}}
+              {{srcText}}
             </p>
             <div class="context">
               <p>
                 {{context}}
               </p>
+           </div>
+           <div class="lang">
+            {{trgLang}} => {{srcLang}}
            </div>
         """
     }
