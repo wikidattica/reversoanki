@@ -1,15 +1,18 @@
+import os
 from random import randint
 
 from aqt import mw
+from . import _version
 # from . import utils
 
 collection = mw.col
+last_version_file = os.path.join(os.path.dirname(__file__), 'last_installed_version')
 
 TEMPLATES = {
     'default': {
         'qfmt': """{{srcText}}<br>
             {{#context}}
-	      <br>
+	         <br>
               <div class="hint">{{hint:context}} </div> 
               <a class="document" href="{{document}}"><span class="document">{{documentTitle}}</span></a>
         {{/context}}
@@ -21,9 +24,11 @@ TEMPLATES = {
             <p class="translation">
             {{translation}}
             </p>
-            <p class="context">
-            {{context}}
-            </p>
+            <div class="context">
+              <p>
+                {{context}}
+              </p>
+           </div>
         """
     },
     'reversed': {
@@ -34,12 +39,15 @@ TEMPLATES = {
         """,
 
         'afmt': """
+            {{translation}}<hr>
             <p class="translation">
-               {{srcText}}
+            {{srcText}}
             </p>
-            <p class="context">
-               {{context}}
-            </p>
+            <div class="context">
+              <p>
+                {{context}}
+              </p>
+           </div>
         """
     }
 }
@@ -76,6 +84,7 @@ a.hint {
    left: 10px; 
    text-align: left;
 }
+// css-version 1.0
 """
 ## This is an old model. It's here just to track that json data from Reverso change...
 ## the translation{1,2,3} doesn't exist anymore
@@ -124,13 +133,24 @@ class ReversoModel:
 
     def __init__(self,  deck_name=None):
         self.model = mw.col.models.byName(self.NAME) or None
-        if self.model:
-            self.modify_template()
+
+        last_installed_version = self.get_last_installed_version()
+        if self.model and last_installed_version < _version.VERSION:
+            self.modify_template(last_installed_version)
+
+        with open(last_version_file, 'w') as f:
+            f.write(_version.VERSION + '\n')
+
         # create_model is called from Client.get_model()
 
-    def modify_template(self):
-        if self.model['css'] and '.document, .lang' in self.model['css']:
-            return
+    def get_last_installed_version(self):
+        ## Anki does not offer a versioning system
+        if os.path.exists(last_version_file):
+            with open(last_version_file, 'r') as f:
+                return f.read().strip()
+        return ''
+
+    def modify_template(self, last_installed_version):
         self.model['css'] = CSS
         self.model['tmpls'][0]['qfmt'] = TEMPLATES['default']['qfmt']
         self.model['tmpls'][0]['afmt'] = TEMPLATES['default']['afmt']
