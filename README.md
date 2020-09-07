@@ -52,8 +52,13 @@ Template changes:
 * colors and font to improve readability
 * added label to show which translation in reguired (es.: en => it)
 
-**rel 1.5.1 2020-09-05***
-Fix in case of first installation
+**rel 1.5.1 2020-09-05*** Fix in case of first installation
+
+**rel 1.5.2 2020-09-07*** Reverso has template similar to front
+
+**Important Note**
+In case of any problems please contact me on the official support page on 
+[anki forum][8] or I won't be able to fix it.
 
 **Authors***
 
@@ -71,3 +76,4 @@ This project is licensed under the GPL License - see the [LICENSE][4] file for d
 [5]: https://github.com/vi3itor/lingualeoanki
 [6]: https://wikidattica.org/media/ck_uploads/2020/06/07/reverso-animated.gif
 [7]: https://ankiweb.net/shared/info/2060267742
+[8]: https://forums.ankiweb.net/t/reverso-plugin-official-support-thread/3059
