@@ -160,14 +160,15 @@ class ReversoModel:
 
     def create_model(self):
         self.model = mw.col.models.new(self.NAME)
-        self.model['tags'].append(self.NAME)
-        self.model['css'] = CSS
         for field in self.FIELDS:
-            mw.col.models.addField(self.model, mw.col.models.newField(field))
+            fld = mw.col.models.newField(field)
+            mw.col.models.addField(self.model, fld)
         val = randint(100000, 1000000)  # Essential for upgrade detection
+        self.model['css'] = CSS
         self.model['id'] = val
-        mw.col.models.update(self.model)
         self.create_templates()
+        # mw.col.models.update(self.model)
+        # mw.col.models.save(self.model)
         return self.model
 
     def create_templates(self):
@@ -177,4 +178,4 @@ class ReversoModel:
             template['afmt'] = info['afmt']
             mw.col.models.addTemplate(self.model, template)
 
-        mw.col.models.update(self.model)
+        # mw.col.models.update(self.model)
