@@ -57,6 +57,8 @@ Template changes:
 **rel 1.5.5 2020-09-07*** Reverso template has template similar to front
                           Front card of Reversed must be empty
 
+**rel 1.6 2020-09-07*** FIX: 'tags' error on new Anki installations
+
 **Important Note**
 In case of any problems please contact me on the official support page on 
 [anki forum][8] or I won't be able to fix it.
