@@ -55,8 +55,6 @@ class Client:
         }
         self.config.update(config)
 
-        self.TMP_FILE = tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", prefix='reverso_', suffix=".csv", delete=False)
         self.notes = []
         self.headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -167,7 +165,7 @@ class Client:
         # and puts cards in the last deck used by the note type
         m['did'] = did
 
-    def import_notes(self):
+    def import_notes(self, csv_filename):
         """
         Implements `non_interactive` mode
         """
@@ -177,12 +175,11 @@ class Client:
             return
         # deck has already been selected
         # import into the collection
-        ti = TextImporter(mw.col, self.TMP_FILE.name)
+        ti = TextImporter(mw.col, csv_filename)
         mw.reset()
         # TextImporter will update card with same srcText
         ti.initMapping()
         ti.run()
-        os.unlink(self.TMP_FILE.name)
 
     def import_data(self, words=None, deck_name=None):
         self.notes = words
@@ -191,8 +188,12 @@ class Client:
             print("Import data to", deck_name or self.config['deck_name'])
         self.get_model()
         self.select_deck(deck_name or self.config.get('deck_name', 'Reverso'))
-        self.get_notes_as_csv()
-        self.import_notes()
+        temp_file = tempfile.NamedTemporaryFile(
+            encoding="utf-8", mode="w+", prefix='reverso_', suffix=".csv", delete=False)
+        self.get_notes_as_csv(temp_file)
+        self.import_notes(temp_file.name)
+        temp_file.close()
+        os.unlink(temp_file.name)
 
     def get_words(self, config=None):
         """Retrieve words from server and set them as self.notes besides returning
@@ -239,9 +240,9 @@ class ReversoClient(Client):
     model_class = ReversoModel
     login_form_selector = 'form#account'
 
-    def get_notes_as_csv(self):
+    def get_notes_as_csv(self, csv_file_hadler):
 
-        writer = csv.writer(self.TMP_FILE, delimiter=',',
+        writer = csv.writer(csv_file_hadler, delimiter=',',
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
         for note in self.notes:
@@ -265,5 +266,5 @@ class ReversoClient(Client):
                 self.config.get('create_reversed') or '',
                 note['id'],
             ])
-        self.TMP_FILE.flush()
+        csv_file_hadler.flush()
 
