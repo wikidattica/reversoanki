@@ -59,6 +59,8 @@ Template changes:
 
 **rel 1.6 2020-09-07*** FIX: 'tags' error on new Anki installations
 
+**rel 1.7 2020-09-07*** FIX: windows errror "file cannot be deleted as busy..."
+
 **Important Note**
 In case of any problems please contact me on the official support page on 
 [anki forum][8] or I won't be able to fix it.
