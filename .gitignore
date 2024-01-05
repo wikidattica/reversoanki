@@ -1,0 +1,7 @@
+meta.json
+cookies.txt
+.idea
+.hg
+.hgignore
+reversi-curl
+reverso/__pycache__
