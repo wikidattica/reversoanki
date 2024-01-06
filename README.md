@@ -61,6 +61,8 @@ Template changes:
 
 **rel 1.7 2020-09-07*** FIX: windows errror "file cannot be deleted as busy..."
 
+**rel 1.8.0 2024-01-06*** porting to anki 23.* and Qt6
+
 **Important Note**
 In case of any problems please contact me on the official support page on 
 [anki forum][8] or I won't be able to fix it.
@@ -72,7 +74,9 @@ Alessandro Dentella for the project [Wikidattica][2]
 The layout of the main window was initially copied from [LinguaLeoAnki][5] plugin.
 
 This project is licensed under the GPL License - see the [LICENSE][4] file for details. 
-
+The code is available on [gitHub](https://github.com/wikidattica/reversoanki)
+any patch is appreciated even only to improve the code readability as I'm not a
+QT buff
 
 [1]: http://www.reverso.net
 [2]: https://apps.ankiweb.net/
