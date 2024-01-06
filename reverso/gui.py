@@ -192,8 +192,8 @@ class PluginWindow(qt.QDialog):
         if 'import_source' in self.config:
             self.radioButtFavourites.setChecked(self.config['import_source'] == 'favourites')
 
-        if 'reversed' in self.config:
-            self.checkBoxReversed.setChecked(self.config['reversed'])
+        if 'create_reversed' in self.config:
+            self.checkBoxReversed.setChecked(self.config['create_reversed'])
 
         if 'import_only_new_words' in self.config:
             self.radioButtNewWords.setChecked(self.config['import_only_new_words'])
@@ -487,5 +487,3 @@ class PluginWindow(qt.QDialog):
             setattr(self, 'silentlyClose', 1)
         elif hasattr(self, 'silentlyClose'):
             delattr(self, 'silentlyClose')
-
-
