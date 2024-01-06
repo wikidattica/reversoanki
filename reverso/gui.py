@@ -108,7 +108,7 @@ class PluginWindow(qt.QDialog):
         form = qt.QFormLayout(frame)
 
         self.radioButtNewWords = qt.QRadioButton(_("After last imported word"))
-        self.radioButtNewWords.setChecked(True)
+        #self.radioButtNewWords.setChecked(True)
 
         lastWordLabel = qt.QLabel(_('Last imported from history:'))
         self.radioButtAllWords = qt.QRadioButton(_("Any"))
@@ -196,12 +196,16 @@ class PluginWindow(qt.QDialog):
             self.checkBoxReversed.setChecked(self.config['create_reversed'])
 
         if 'import_only_new_words' in self.config:
-            self.radioButtNewWords.setChecked(self.config['import_only_new_words'])
+            if self.config['import_only_new_words']:
+                self.radioButtNewWords.setChecked(True)
+            else:
+                self.radioButtAllWords.setChecked(True)
+            #self.radioButtNewWords.setChecked(self.config['import_only_new_words'])
 
         self.loginField.setText(self.config['email'])
         self.passField.setText(self.config['password'])
         self.toggle_history_vs_favourites()
-        self.toggle_all_vs_new()
+        # self.toggle_all_vs_new()
         self.on_reversed_toggle()
 
 # Button clicks handlers and overridden events
@@ -285,6 +289,7 @@ class PluginWindow(qt.QDialog):
                 self.config['last_imported_from_history'] = self.lastWordField.text()
                 self.config['last_imported_from_favourites'] = self.lastWordFavouritesField.text()
                 self.config['import_source'] = 'history' if self.radioButtHistory.isChecked() else 'favourites'
+                self.config['import_only_new_words'] = True if self.radioButtNewWords.isChecked() else False
         mw.addonManager.writeConfig(__name__, self.config)
 
     def toggle_history_vs_favourites(self):
@@ -301,7 +306,8 @@ class PluginWindow(qt.QDialog):
             self.lastWordFavouritesField.setEnabled(only_new)
 
     def toggle_all_vs_new(self):
-        self.toggle_history_vs_favourites()
+        # I can't remember why originlly I set this...
+        # self.toggle_history_vs_favourites()
         status = self.radioButtNewWords.isChecked()
         self.config['import_only_new_words'] = status
 
