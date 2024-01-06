@@ -61,6 +61,8 @@ Template changes:
 
 **rel 1.7 2020-09-07*** FIX: windows errror "file cannot be deleted as busy..."
 
+**rel 1.8.0 2024-01-06*** porting to anki 23.* and Qt6
+
 **Important Note**
 In case of any problems please contact me on the official support page on 
 [anki forum][8] or I won't be able to fix it.
