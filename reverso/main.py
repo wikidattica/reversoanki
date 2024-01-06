@@ -23,7 +23,10 @@ def activate():
         if config:
             window = gui.PluginWindow(mw)
             setattr(mw, ADDON_NAME, window)
-            window.exec_()
+            try:
+                window.exec_()
+            except:
+                window.exec()
         else:
             showInfo("Unable to load config. Make sure that config.json "
                      "is present and not in use by other applications")

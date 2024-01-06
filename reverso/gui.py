@@ -1,15 +1,18 @@
 import platform as pm
 
-from aqt import mw
-from aqt.utils import showInfo
-from PyQt5 import QtCore, QtGui, QtWidgets
-from aqt import qt
-# TODO: change to:  import connect as connector
-from . import connect
-from . import utils
 from anki.lang import _
+from aqt import mw, qt
+from aqt.utils import showInfo
+
+# TODO: change to:  import connect as connector
+from . import connect, utils
 from ._name import ADDON_NAME
 from ._version import VERSION
+
+try:
+    from PyQt6 import QtCore, QtGui, QtWidgets
+except ImportError:
+    from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 CurrentDeckMessage = _("""\
@@ -67,11 +70,17 @@ class PluginWindow(qt.QDialog):
         label = qt.QLabel(label)
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
+        # font.setWeight(QtGui.QFont.Bold)
+        # font.setWeight(75)
         label.setFont(font)
         frame = qt.QFrame()
-        frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        try:
+            frame.setFrameShape(QtWidgets.QFrame.Shape.Panel)
+            frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)  
+        except:
+            frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+            frame.setFrameShadow(QtWidgets.QFrame.Raised)
+
         layout.addWidget(label)
         layout.addWidget(frame)
         return layout, frame
@@ -83,8 +92,12 @@ class PluginWindow(qt.QDialog):
         self.loginField = qt.QLineEdit()
         passLabel = qt.QLabel(_('Password:'))
         self.passField = qt.QLineEdit()
-        self.passField.setEchoMode(qt.QLineEdit.Password)
-
+        try:
+            #qt6
+            self.passField.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
+        except:
+            self.passField.setEchoMode(qt.QLineEdit.Password)
+            
         login_form.addRow(loginLabel, self.loginField)
         login_form.addRow(passLabel, self.passField)
         return layout
@@ -425,7 +438,7 @@ class PluginWindow(qt.QDialog):
             self.progressBar.show()
         else:
             self.progressBar.hide()
-            
+
         self.progressLabel.setText(label)
 
     def showErrorMessage(self, msg):

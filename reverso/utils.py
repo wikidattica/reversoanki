@@ -61,7 +61,7 @@ def setReverseField(browser, nids):
     cnt = 0
     optional_anki_reverse_name = _("Add Reverse")
     for nid in nids:
-        note = mw.col.getNote(nid)
+        note = mw.col.get_note(nid)
         if 'reverse' in note and not note['reverse']:
             note['reverse'] = "1"
             cnt += 1
@@ -92,8 +92,8 @@ def onBatchEdit(browser):
 
 def setupMenu(browser, menu=None):
     menu = menu or browser.form.menuEdit
-    menu_data = [x.data() for x in menu.children()]
-    ## Both Reverso and Fleex add-on use this functionthat doesn't need
+    menu_data = [action.text() for action in menu.actions()]
+    ## Both Reverso and Fleex add-on use this function that doesn't need
     ## to be repeated
     if 'add_reverse' in menu_data:
         return
@@ -102,6 +102,7 @@ def setupMenu(browser, menu=None):
     a.setData('add_reverse')
     #a.setShortcut(QKeySequence("Control+Alt+1"))
     a.triggered.connect(lambda _, b=browser: onBatchEdit(b))
+
 
 def get_module_name():
     return __name__.split(".")[0]
