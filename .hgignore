@@ -2,6 +2,7 @@ syntax:glob
 .svn
 *.pyc
 *.backups*
+.mypy_cache
 meta.json
 crea-pkg.sh
 Makefile
