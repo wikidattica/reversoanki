@@ -5,7 +5,9 @@ from aqt import mw
 from aqt.utils import tooltip
 from ._version import VERSION
 from anki.lang import _
-
+from anki.utils import pointVersion
+from aqt.operations import CollectionOp
+from anki.collection import OpChangesWithCount
 
 def get_config():
     # Load config from config.json file
@@ -55,32 +57,35 @@ def is_newer_version_available(lines):
 def setReverseField(browser, nids):
 
     mw = browser.mw
-    mw.checkpoint("add_reverse")
-    mw.progress.start()
-    browser.model.beginReset()
-    cnt = 0
     optional_anki_reverse_name = _("Add Reverse")
-    for nid in nids:
-        note = mw.col.get_note(nid)
-        if 'reverse' in note and not note['reverse']:
-            note['reverse'] = "1"
-            cnt += 1
-            note.flush()
-    if optional_anki_reverse_name in note and not note[optional_anki_reverse_name]:
-        note[optional_anki_reverse_name] = "1"
-        cnt += 1
-        note.flush()
 
-    browser.model.endReset()
-    mw.requireReset()
-    mw.progress.finish()
-    mw.reset()
-    if cnt:
-        tooltip("<b>Added</b> {0} reversed cards.".format(cnt), parent=browser)
-    else:
-        msg = "No card found to reverse.\nOnly cards with field 'reverse' or '{}' are looked for"
-        tooltip(msg.format(optional_anki_reverse_name), parent=browser)
+    def op(col):
+        notes = []
+        for nid in nids:
+            note = col.get_note(nid)
+            if 'reverse' in note and not note['reverse']:
+                note['reverse'] = "1"
+                notes.append(note)
+            if optional_anki_reverse_name in note and not note[optional_anki_reverse_name]:
+                note[optional_anki_reverse_name] = "1"
+                if note not in notes:
+                    notes.append(note)
 
+        return OpChangesWithCount(changes=col.update_notes(notes), count=len(notes))
+
+    def success(changes):
+        if pointVersion() < 50:
+            mw.progress.finish()
+        if changes.count:
+            tooltip("<b>Added</b> {0} reversed cards.".format(changes.count), parent=browser)
+        else:
+            msg = "No card found to reverse.\nOnly cards with field 'reverse' or '{}' are looked for"
+            tooltip(msg.format(optional_anki_reverse_name), parent=browser)
+
+    # Seems to be required in 2.1.45 at least
+    if pointVersion() < 50:
+        mw.progress.start(parent=mw)
+    CollectionOp(browser, op).success(success).run_in_background()
 
 def onBatchEdit(browser):
     nids = browser.selectedNotes()
