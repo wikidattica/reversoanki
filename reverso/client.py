@@ -135,8 +135,8 @@ class Client:
         """"We need to gather info from the form"""
 
         soup = BeautifulSoup(html, 'html.parser')
-        form = soup.select_one(self.login_form_selector)
-        __RequestVerificationToken = form.find('input', type="hidden").get('value')
+        #form = soup.select_one(self.login_form_selector)
+        __RequestVerificationToken = soup.find('input', type="hidden").get('value')
         if self.verbose:
             print(__RequestVerificationToken)
         return __RequestVerificationToken
