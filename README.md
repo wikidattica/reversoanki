@@ -63,6 +63,8 @@ Template changes:
 
 **rel 1.8.0 2024-01-06*** porting to anki 23.* and Qt6
 
+**rel 1.9.0 2024-08-30*** fix auth in Reverso
+
 **Important Note**
 In case of any problems please contact me on the official support page on 
 [anki forum][8] or I won't be able to fix it.
